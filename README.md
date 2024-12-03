@@ -13,3 +13,11 @@ Main Functionalities:
 ● Administrator management of schedules, elds, and pricing
 ● Calendar integration for automated booking reminders
 
+
+Main Inputs and Outputs:
+    ● Inputs:
+User credentials, field preferences, booking date/time, payment details,
+cancellation/modification requests.
+    ● Outputs:
+Booking confirmations, notifications (email/SMS), booking schedules, payment
+receipts, availability status updates.
