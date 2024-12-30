@@ -7,5 +7,6 @@ class Reservation(models.Model):
     time_from = fields.Datetime(string="Time From")
     time_to = fields.Datetime(string="Time To")
     field = fields.Many2one(comodel_name='field', string="Field")
+    state = fields.Selection(selection=[('draft', 'Draft'), ('confirmed', 'Confirmed'), ('completed' ,'Completed')])
     price = fields.Float(string="Price")
 
