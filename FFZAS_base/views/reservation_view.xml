@@ -1,0 +1,49 @@
+<odoo>
+  <data>
+
+<!--    views-->
+    <record id="view_reservation_kanban" model="ir.ui.view">
+      <field name="name">reservation.kanban.view</field>
+      <field name="model">reservation</field>
+      <field name="arch" type="xml">
+        <kanban>
+          <field name="state" invisible="1" />
+            <templates>
+              <t t-name="kanban-box">
+                <div t-attf-class="o_kanban_card {{ record.state.raw_value }}">
+                  <div class="oe_kanban_content">
+                    <strong t-esc="record.name" />
+                    <div>
+                      <small t-esc="record.date" />
+                    </div>
+                    <div t-if="record.price">
+                      <span t-esc="'USD ' + record.price" />
+                    </div>
+                  </div>
+                  <div class="oe_kanban_footer">
+                    <span class="badge" t-esc="record.state" />
+                  </div>
+                </div>
+              </t>
+            </templates>
+          </kanban>
+      </field>
+    </record>
+
+
+    <!--  action views-->
+    <record id="action_reservation_kanban" model="ir.actions.act_window">
+      <field name="name">Reservations</field>
+      <field name="res_model">reservation</field>
+      <field name="view_mode">kanban</field>
+      <field name="view_id" ref="view_reservation_kanban" />
+      <field name="context">{'group_by': 'state'}</field>
+    </record>
+
+
+    <!--    menu items-->
+    <menuitem id="menu_reservation_root" name="Reservations Management" />
+    <menuitem id="menu_reservation_dashboard" name="Dashboard" parent="menu_reservation_root" action="action_reservation_kanban" />
+
+  </data>
+</odoo>
