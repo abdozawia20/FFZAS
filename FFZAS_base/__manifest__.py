@@ -17,8 +17,8 @@ Long description of module's purpose
     'depends': ['base'],
 
     'data': [
-        # TODO : add the sercuiry and UI
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
+        'views/reservation_view.xml',
     ],
 
     'installable': True,
