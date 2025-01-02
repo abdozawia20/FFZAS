@@ -1,37 +1,27 @@
 <odoo>
   <data>
-
-<!--    views-->
+    <!-- Kanban View -->
     <record id="view_reservation_kanban" model="ir.ui.view">
       <field name="name">reservation.kanban.view</field>
       <field name="model">reservation</field>
       <field name="arch" type="xml">
         <kanban>
-          <field name="state" invisible="1" />
-            <templates>
-              <t t-name="kanban-box">
-                <div t-attf-class="o_kanban_card {{ record.state.raw_value }}">
-                  <div class="oe_kanban_content">
-                    <strong t-esc="record.name" />
-                    <div>
-                      <small t-esc="record.date" />
-                    </div>
-                    <div t-if="record.price">
-                      <span t-esc="'USD ' + record.price" />
-                    </div>
-                  </div>
-                  <div class="oe_kanban_footer">
-                    <span class="badge" t-esc="record.state" />
-                  </div>
+          <templates>
+            <t t-name="kanban-box">
+              <div class="o_kanban_card">
+                <div class="oe_kanban_content">
+                  <strong>Reservation</strong>
                 </div>
-              </t>
-            </templates>
-          </kanban>
+              </div>
+            </t>
+          </templates>
+        </kanban>
       </field>
     </record>
 
+    <!-- Form View  -->
     <record id="view_reservation_form" model="ir.ui.view">
-      <field name="name">reservation.form</field>
+      <field name="name">reservation.form.view</field>
       <field name="model">reservation</field>
       <field name="arch" type="xml">
         <form string="Reservation">
@@ -40,8 +30,9 @@
               <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,finished"/>
             </header>
             <group>
+              <!-- Split into two groups -->
               <group>
-                <field name="customer"/>
+                <field name="customer" readonly="1"/>
                 <field name="name" readonly="1"/>
                 <field name="surname" readonly="1"/>
                 <field name="telephone" readonly="1"/>
@@ -49,29 +40,41 @@
               <group>
                 <field name="time_from"/>
                 <field name="time_to"/>
-                <field name="capacity"/>
+                <field name="capacity" readonly="0"/>
               </group>
             </group>
+            <group>
               <field name="price" string="Total Price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+            </group>
           </sheet>
         </form>
       </field>
     </record>
 
-
-    <!--  action views-->
-    <record id="action_reservation_kanban" model="ir.actions.act_window">
+    <!-- Action for Kanban and Form View -->
+    <record id="action_reservation_kanban_form" model="ir.actions.act_window">
       <field name="name">Reservations</field>
       <field name="res_model">reservation</field>
       <field name="view_mode">kanban,form</field>
-      <field name="view_id" ref="view_reservation_kanban" />
+      <field name="view_id" ref="view_reservation_kanban"/>
       <field name="context">{'group_by': 'state'}</field>
+      <field name="groups_id" eval="[(4, ref('base.group_user')), (4, ref('base.group_system'))]"/>
     </record>
 
+    <!-- Menu Item -->
+    <menuitem id="menu_reservation_root" name="Reservations Management"/>
+    <menuitem id="menu_reservation_dashboard" name="Dashboard" parent="menu_reservation_root" action="action_reservation_kanban_form"/>
 
-    <!--    menu items-->
-    <menuitem id="menu_reservation_root" name="Reservations Management" />
-    <menuitem id="menu_reservation_dashboard" name="Dashboard" parent="menu_reservation_root" action="action_reservation_kanban" />
-
+    <!-- Access Control for Employee and SuperUser -->
+    <record id="reservation_form_access_super_user_employee" model="ir.model.access">
+      <field name="name">reservation form access for Employee and SuperUser</field>
+      <field name="model_id" ref="model_reservation"/>
+      <field name="group_id" ref="base.group_user"/>  <!-- Employee -->
+      <field name="group_id" ref="base.group_system"/>  <!-- SuperUser -->
+      <field name="perm_read" eval="True"/>
+      <field name="perm_write" eval="True"/>
+      <field name="perm_create" eval="True"/>
+      <field name="perm_unlink" eval="True"/>
+    </record>
   </data>
 </odoo>
