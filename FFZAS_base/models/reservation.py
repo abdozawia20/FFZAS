@@ -1,4 +1,6 @@
-from odoo import fields, models
+from odoo import fields, models, api
+from odoo.exceptions import UserError
+
 
 class Reservation(models.Model):
     _name = "reservation"
@@ -23,3 +25,12 @@ class Reservation(models.Model):
             return True
         return False
     # (^_^)
+
+    @api.model
+    def unlink(self):
+
+        for rec in self:
+            if rec.state == 'confirmed':
+                raise UserError(f"The reservation id: {rec.id} cannot be deleted because it's confirmed.")
+
+        return super(Reservation, self).unlink()
