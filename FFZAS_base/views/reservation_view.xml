@@ -30,12 +30,40 @@
       </field>
     </record>
 
+    <record id="view_reservation_form" model="ir.ui.view">
+      <field name="name">reservation.form</field>
+      <field name="model">reservation</field>
+      <field name="arch" type="xml">
+        <form string="Reservation">
+          <sheet>
+            <header>
+              <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,finished"/>
+            </header>
+            <group>
+              <group>
+                <field name="customer"/>
+                <field name="name" readonly="1"/>
+                <field name="surname" readonly="1"/>
+                <field name="telephone" readonly="1"/>
+              </group>
+              <group>
+                <field name="time_from"/>
+                <field name="time_to"/>
+                <field name="capacity"/>
+              </group>
+            </group>
+              <field name="price" string="Total Price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
 
     <!--  action views-->
     <record id="action_reservation_kanban" model="ir.actions.act_window">
       <field name="name">Reservations</field>
       <field name="res_model">reservation</field>
-      <field name="view_mode">kanban</field>
+      <field name="view_mode">kanban,form</field>
       <field name="view_id" ref="view_reservation_kanban" />
       <field name="context">{'group_by': 'state'}</field>
     </record>
