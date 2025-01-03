@@ -74,12 +74,13 @@
       </field>
     </record>
 
-    <!-- Tree View for Users -->
-    <record id="view_users_tree" model="ir.ui.view">
-      <field name="name">users.tree.view</field>
+    <!-- Tree View for Customers -->
+    <record id="view_customers_tree" model="ir.ui.view">
+      <field name="name">customers.tree.view</field>
       <field name="model">res.users</field>
       <field name="arch" type="xml">
-        <tree string="User Accounts">
+        <tree string="Customers">
+          <field name="id" string="Customer ID" />
           <field name="name" string="Name" />
           <field name="surname" string="Surname" />
           <field name="telephone" string="Telephone" />
@@ -108,21 +109,19 @@
       <field name="groups_id" eval="[(4, ref('base.group_user')), (4, ref('base.group_system'))]" />
     </record>
 
-    <!-- Action for Users Tree View -->
-    <record id="action_users_tree" model="ir.actions.act_window">
-      <field name="name">User Accounts</field>
+    <!-- Action for Customers Tree View -->
+    <record id="action_customers_tree" model="ir.actions.act_window">
+      <field name="name">Customers</field>
       <field name="res_model">res.users</field>
       <field name="view_mode">tree</field>
-      <field name="view_id" ref="view_users_tree" />
+      <field name="view_id" ref="view_customers_tree" />
     </record>
 
    <!-- Menu Item -->
     <menuitem id="menu_reservation_root" name="Reservations Management"/>
     <menuitem id="menu_reservation_dashboard" name="Dashboard" parent="menu_reservation_root" action="action_reservation_kanban_form"/>
     <menuitem id="menu_reservation_dashboard" name="Dashboard" parent="menu_reservation_root" action="action_reservation_tree_form"/>
-    <!-- Menu Item for Accounts Tab -->
-    <menuitem id="menu_accounts_root" name="Accounts" />
-    <menuitem id="menu_accounts_users" name="Users" parent="menu_accounts_root" action="action_users_tree" />
+    <menuitem id="menu_reservation_customers" name="Customers" parent="menu_reservation_root" action="action_customers_tree" />
 
 
     <!-- Access Control for Employee and SuperUser -->
