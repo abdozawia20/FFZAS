@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+
+    <record id="view_res_users_tree_customer" model="ir.ui.view">
+        <field name="name">res.users.tree.customer</field>
+        <field name="model">res.users</field>
+        <field name="arch" type="xml">
+            <tree string="Customers">
+                <field name="id" string="Customer ID"/>
+                <field name="name"/>
+                <field name="surname"/>
+                <field name="telephone"/>
+                <field name="type"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_res_users_customer" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_res_users_tree_customer"/>
+        <field name="context">{'default_type': 'c'}</field>
+    </record>
+
+    <menuitem id="menu_res_users_customer" name="Customers" parent="menu_reservation_root" action="action_res_users_customer"/>
+
+    </data>>
+</odoo>
