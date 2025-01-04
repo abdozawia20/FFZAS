@@ -42,7 +42,18 @@ class Reservation(models.Model):
         if self.is_field_available(values.get('time_from'), values.get('time_to'), field):
             raise UserError("The selected field is already booked during the specified time range.")
 
-        return super(Reservation, self).create(values) # Proceed with creating the reservation
+            # Create the reservation record
+            new_reservation = super(Reservation, self).create(values)
+
+            # Get the customer's username for the success message
+            customer_name = new_reservation.customer.name
+
+            #Display Success message along with the username
+            message = f"Success! Reservation has been created for {customer_name}."
+            new_reservation.message_post(body=message)
+
+            return new_reservation
+
 
     def write(self, values):
         # Checking if field is available before updating the reservation
@@ -51,7 +62,18 @@ class Reservation(models.Model):
             raise UserError(
                 f"Unable to update the reservation from {self.time_from} to {self.time_to} because it conflicts with another reservation.")
 
-        return super(Reservation, self).write(values) # Proceed with updating the reservation
+        # Update the reservation record
+        result = super(Reservation, self).write(values)
+
+        # Get the customer's username for the success message
+        for reservation in self:
+            customer_name = reservation.customer.name
+
+            #Display Success message along with the username
+            message = f"Success! Reservation for {customer_name} has been updated."
+            reservation.message_post(body=message)
+
+        return result
 
     @api.depends("customer")
     def _compute_name(self):
