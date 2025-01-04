@@ -96,7 +96,7 @@
     <!-- Menu Item -->
     <menuitem id="menu_reservation_root" name="Reservations Management"/>
     <menuitem id="menu_reservation_dashboard" name="Dashboard" parent="menu_reservation_root" action="action_reservation_kanban_form"/>
-    <menuitem id="menu_reservation_dashboard" name="Dashboard" parent="menu_reservation_root" action="action_reservation_tree_form"/>
+    <menuitem id="menu_reservation_tree_view" name="Reservation" parent="menu_reservation_root" action="action_reservation_tree_form"/>
 
     <!-- Access Control for Employee and SuperUser -->
     <record id="reservation_form_access_super_user_employee" model="ir.model.access">
