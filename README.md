@@ -7,7 +7,7 @@ A complete platform called the Online Sports Field Reservation System was create
  ● Real-time eld availability search and booking 
  ● Flexible time slot selection (hourly, daily, etc.)
  ● Booking conrmation, reminders, and cancellation options 
- ● Administrator management of schedules, elds, and pricing 
+ ● Administrator management of schedules, elds, and pricing
  ● Calendar integration for automated booking reminders
 
 ## Main Inputs and Outputs: 

@@ -1,2 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-# access_product_url_mataa,access.product.url.mataa,model_product_url,,1,1,1,1
+access_reservation,access.reservation,model_reservation,,1,1,1,1
+access_field,access.field,model_field,,1,1,1,1
+access_res_users,access.res.users,model_res_users,,1,1,1,1

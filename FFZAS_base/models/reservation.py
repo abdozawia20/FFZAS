@@ -5,12 +5,22 @@ from odoo.exceptions import UserError
 class Reservation(models.Model):
     _name = "reservation"
 
-    customer = fields.Many2one(comodel_name='res.user', string="Customer", domain=[("type", 'in', "c")])
+    customer = fields.Many2one(comodel_name='res.users', string="Customer", required=True)
     time_from = fields.Datetime(string="Time From")
     time_to = fields.Datetime(string="Time To")
     field = fields.Many2one(comodel_name='field', string="Field")
-    state = fields.Selection(selection=[('draft', 'Draft'), ('confirmed', 'Confirmed'), ('completed' ,'Completed')])
+    state = fields.Selection(
+        selection=[('draft', 'Draft'), ('confirmed', 'Confirmed'), ('completed' ,'Completed')],
+        default="draft",
+        readonly=True
+    )
     price = fields.Float(string="Price")
+
+    # Temp variables:
+    name = fields.Char(related='customer.name', compute="_compute_name", string="Name", readonly=True, default="")
+    surname = fields.Text(related='customer.surname', compute="_compute_surname", string="Surname", readonly=True, default="")
+    telephone = fields.Text(related='customer.telephone', compute="_compute_telephone", string="Telephone", readonly=True, default="")
+    capacity = fields.Integer(related='field.capacity', compute="_compute_capacity", string="Capacity", readonly=True, default=None)
 
     def is_field_available(self, time_from, time_to, field):
         field_id = field.id
@@ -24,7 +34,6 @@ class Reservation(models.Model):
         if reservations:
             return True
         return False
-    # (^_^)
 
     @api.model
     def create(self, values):
@@ -43,5 +52,28 @@ class Reservation(models.Model):
                 f"Unable to update the reservation from {self.time_from} to {self.time_to} because it conflicts with another reservation.")
 
         return super(Reservation, self).write(values) # Proceed with updating the reservation
-    # (^_^)
 
+    @api.depends("customer")
+    def _compute_name(self):
+        self.name = self.customer.name
+
+    @api.depends("customer")
+    def _compute_surname(self):
+        self.surname = self.customer.surname
+
+    @api.depends("customer")
+    def _compute_telephone(self):
+        self.telephone = self.customer.telephone
+
+    @api.depends("customer")
+    def _compute_capacity(self):
+        self.capacity = self.field.capacity
+
+    @api.model
+    def unlink(self):
+
+        for rec in self:
+            if rec.state == 'confirmed':
+                raise UserError(f"The reservation id: {rec.id} cannot be deleted because it's confirmed.")
+
+        return super(Reservation, self).unlink()
