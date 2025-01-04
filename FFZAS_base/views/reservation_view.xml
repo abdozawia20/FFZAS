@@ -28,6 +28,19 @@
           </kanban>
       </field>
     </record>
+    
+    <!-- Tree View -->
+    <record id="view_reservation_tree" model="ir.ui.view">
+      <field name="name">reservation.tree.view</field>
+      <field name="model">reservation</field>
+      <field name="arch" type="xml">
+        <tree string="Reservations">
+          <field name="id" string="Reservation ID"/>
+          <field name="state" string="Status"/>
+          <field name="price" string="Amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+        </tree>
+      </field>
+    </record>
 
     <!-- Form View  -->
     <record id="view_reservation_form" model="ir.ui.view">
@@ -70,10 +83,20 @@
       <field name="context">{'group_by': 'state'}</field>
       <field name="groups_id" eval="[(4, ref('base.group_user')), (4, ref('base.group_system'))]"/>
     </record>
+    <!-- Updated Action with Tree View -->
+    <record id="action_reservation_tree_form" model="ir.actions.act_window">
+      <field name="name">Reservations</field>
+      <field name="res_model">reservation</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="view_reservation_tree"/>
+      <field name="context">{'group_by': 'state'}</field>
+      <field name="groups_id" eval="[(4, ref('base.group_user')), (4, ref('base.group_system'))]"/>
+    </record>
 
     <!-- Menu Item -->
     <menuitem id="menu_reservation_root" name="Reservations Management"/>
     <menuitem id="menu_reservation_dashboard" name="Dashboard" parent="menu_reservation_root" action="action_reservation_kanban_form"/>
+    <menuitem id="menu_reservation_tree_view" name="Reservation" parent="menu_reservation_root" action="action_reservation_tree_form"/>
 
     <!-- Access Control for Employee and SuperUser -->
     <record id="reservation_form_access_super_user_employee" model="ir.model.access">
