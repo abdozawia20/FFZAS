@@ -1,49 +1,49 @@
+
 <odoo>
   <data>
-
-    <!-- Kanban View -->
+    <!-- kanban View  -->
     <record id="view_reservation_kanban" model="ir.ui.view">
       <field name="name">reservation.kanban.view</field>
       <field name="model">reservation</field>
       <field name="arch" type="xml">
         <kanban>
           <field name="state" invisible="1" />
-          <templates>
-            <t t-name="kanban-box">
-              <div t-attf-class="o_kanban_card {{ record.state.raw_value }}">
-                <div class="oe_kanban_content">
-                  <strong t-esc="record.name" />
-                  <div>
-                    <small t-esc="record.date" />
+            <templates>
+              <t t-name="kanban-box">
+                <div t-attf-class="o_kanban_card {{ record.state.raw_value }}">
+                  <div class="oe_kanban_content">
+                    <strong t-esc="record.name" />
+                    <div>
+                      <small t-esc="record.date" />
+                    </div>
+                    <div t-if="record.price">
+                      <span t-esc="'USD ' + record.price" />
+                    </div>
                   </div>
-                  <div t-if="record.price">
-                    <span t-esc="'USD ' + record.price" />
+                  <div class="oe_kanban_footer">
+                    <span class="badge" t-esc="record.state" />
                   </div>
                 </div>
-                <div class="oe_kanban_footer">
-                  <span class="badge" t-esc="record.state" />
-                </div>
-              </div>
-            </t>
-          </templates>
-        </kanban>
+              </t>
+            </templates>
+          </kanban>
       </field>
     </record>
 
-    <!-- Tree View for Reservations -->
+    <!-- Tree View -->
     <record id="view_reservation_tree" model="ir.ui.view">
       <field name="name">reservation.tree.view</field>
       <field name="model">reservation</field>
       <field name="arch" type="xml">
         <tree string="Reservations">
-          <field name="id" string="Reservation ID" />
-          <field name="state" string="Status" />
-          <field name="price" string="Amount" widget="monetary" options="{'currency_field': 'currency_id'}" />
+          <field name="id" string="Reservation ID"/>
+          <field name="state" string="Status"/>
+          <field name="price" string="Amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
         </tree>
       </field>
     </record>
 
-    <!-- Form View -->
+    <!-- Form View  -->
     <record id="view_reservation_form" model="ir.ui.view">
       <field name="name">reservation.form.view</field>
       <field name="model">reservation</field>
@@ -51,90 +51,89 @@
         <form string="Reservation">
           <sheet>
             <header>
-              <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,finished" />
+              <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,finished"/>
             </header>
             <group>
+              <!-- Split into two groups -->
               <group>
-                <field name="customer" readonly="0" />
-                <field name="name" readonly="1" />
-                <field name="surname" readonly="1" />
-                <field name="telephone" readonly="1" />
+                <field name="customer" readonly="1"/>
+                <field name="name" readonly="1"/>
+                <field name="surname" readonly="1"/>
+                <field name="telephone" readonly="1"/>
               </group>
               <group>
-                <field name="time_from" />
-                <field name="time_to" />
-                <field name="capacity" readonly="0" />
+                <field name="time_from"/>
+                <field name="time_to"/>
+                <field name="capacity" readonly="0"/>
               </group>
             </group>
             <group>
-              <field name="price" string="Total Price" widget="monetary" options="{'currency_field': 'currency_id'}" />
+              <field name="price" string="Total Price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
             </group>
           </sheet>
         </form>
       </field>
     </record>
 
-    <!-- Tree View for Customers -->
-    <record id="view_customers_tree" model="ir.ui.view">
-      <field name="name">customers.tree.view</field>
+        <!-- Tree View for Customers -->
+    <record id="view_customer_tree" model="ir.ui.view">
+      <field name="name">customer.tree.view</field>
       <field name="model">res.users</field>
       <field name="arch" type="xml">
-        <tree string="Customers">
-          <field name="id" string="Customer ID" />
-          <field name="name" string="Name" />
-          <field name="surname" string="Surname" />
-          <field name="telephone" string="Telephone" />
-          <field name="type" string="Type" />
+        <tree string="Customer">
+          <field name="id" string="Customer ID"/>
+          <field name="name" string="Name"/>
+          <field name="surname" string="Surname"/>
+          <field name="telephone" string="Telephone"/>
+          <field name="type" string="Type"/>
         </tree>
       </field>
     </record>
 
-    <!-- Action for Kanban View -->
+    <!-- Action for Kanban and Form View -->
     <record id="action_reservation_kanban_form" model="ir.actions.act_window">
       <field name="name">Reservations</field>
       <field name="res_model">reservation</field>
       <field name="view_mode">kanban,form</field>
-      <field name="view_id" ref="view_reservation_kanban" />
+      <field name="view_id" ref="view_reservation_kanban"/>
       <field name="context">{'group_by': 'state'}</field>
-      <field name="groups_id" eval="[(4, ref('base.group_user')), (4, ref('base.group_system'))]" />
+      <field name="groups_id" eval="[(4, ref('base.group_user')), (4, ref('base.group_system'))]"/>
     </record>
-
-    <!-- Action for Tree and Form View -->
+    <!-- Action with Tree View -->
     <record id="action_reservation_tree_form" model="ir.actions.act_window">
       <field name="name">Reservations</field>
       <field name="res_model">reservation</field>
       <field name="view_mode">tree,form</field>
-      <field name="view_id" ref="view_reservation_tree" />
+      <field name="view_id" ref="view_reservation_tree"/>
       <field name="context">{'group_by': 'state'}</field>
-      <field name="groups_id" eval="[(4, ref('base.group_user')), (4, ref('base.group_system'))]" />
+      <field name="groups_id" eval="[(4, ref('base.group_user')), (4, ref('base.group_system'))]"/>
     </record>
-
-    <!-- Action for Customers Tree View -->
-    <record id="action_customers_tree" model="ir.actions.act_window">
-      <field name="name">Customers</field>
+    <!-- Customer action with Tree View -->
+    <record id="action_customer_tree" model="ir.actions.act_window">
+      <field name="name">Customer</field>
       <field name="res_model">res.users</field>
       <field name="view_mode">tree</field>
-      <field name="view_id" ref="view_customers_tree" />
+      <field name="view_id" ref="view_customer_tree"/>
+      <field name="context">{}</field>
+      <field name="groups_id" eval="[(4, ref('base.group_user')), (4, ref('base.group_system'))]"/>
     </record>
 
-   <!-- Menu Item -->
+    <!-- Menu Item -->
     <menuitem id="menu_reservation_root" name="Reservations Management"/>
     <menuitem id="menu_reservation_dashboard" name="Dashboard" parent="menu_reservation_root" action="action_reservation_kanban_form"/>
-    <menuitem id="menu_reservation_dashboard" name="Dashboard" parent="menu_reservation_root" action="action_reservation_tree_form"/>
-    <menuitem id="menu_reservation_customers" name="Customers" parent="menu_reservation_root" action="action_customers_tree" />
-
+    <menuitem id="menu_reservation_tree_view" name="Reservation" parent="menu_reservation_root" action="action_reservation_tree_form"/>
+    <menuitem id="menu_customer_tree_view" name="Customer" parent="menu_reservation_root" action="action_customer_tree"/>
 
     <!-- Access Control for Employee and SuperUser -->
     <record id="reservation_form_access_super_user_employee" model="ir.model.access">
       <field name="name">reservation form access for Employee and SuperUser</field>
-      <field name="model_id" ref="model_reservation" />
-      <field name="group_id" ref="base.group_user" />
-      <field name="group_id" ref="base.group_system" />
-      <field name="perm_read" eval="True" />
-      <field name="perm_write" eval="True" />
-      <field name="perm_create" eval="True" />
-      <field name="perm_unlink" eval="True" />
+      <field name="model_id" ref="model_reservation"/>
+      <field name="group_id" ref="base.group_user"/>  <!-- Employee -->
+      <field name="group_id" ref="base.group_system"/>  <!-- SuperUser -->
+      <field name="perm_read" eval="True"/>
+      <field name="perm_write" eval="True"/>
+      <field name="perm_create" eval="True"/>
+      <field name="perm_unlink" eval="True"/>
     </record>
-
   </data>
 </odoo>
