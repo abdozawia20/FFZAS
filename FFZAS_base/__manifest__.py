@@ -19,6 +19,7 @@ Long description of module's purpose
     'data': [
         'security/ir.model.access.csv',
         'views/reservation_view.xml',
+        'views/res_users_views.xml',
     ],
 
     'installable': True,
