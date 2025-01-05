@@ -42,16 +42,16 @@ class Reservation(models.Model):
         if self.is_field_available(values.get('time_from'), values.get('time_to'), field):
             raise UserError("The selected field is already booked during the specified time range.")
 
-        return super(Reservation, self).create(values) # Proceed with creating the reservation
+        return super(Reservation, self).create(values)  # Proceed with creating the reservation
 
     def write(self, values):
         # Checking if field is available before updating the reservation
         field = self.env['field'].browse(values.get('field')) if values.get('field') else self.field
-        if self.is_field_available(values.get('time_from', self.time_from), values.get('time_to', self.time_to), field): # checking the new time range
+        if self.is_field_available(values.get('time_from', self.time_from), values.get('time_to', self.time_to),field):  # checking the new time range
             raise UserError(
                 f"Unable to update the reservation from {self.time_from} to {self.time_to} because it conflicts with another reservation.")
 
-        return super(Reservation, self).write(values) # Proceed with updating the reservation
+        return super(Reservation, self).write(values)  # Proceed with updating the reservation
 
     @api.depends("customer")
     def _compute_name(self):
