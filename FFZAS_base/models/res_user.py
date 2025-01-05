@@ -37,3 +37,10 @@ class ResUsers(models.Model):
                 self.env.user.notify_info(message)
 
         return result
+
+    def unlink(self):
+        for rec in self:
+            reservations = rec.env['reservation'].search(['customer', '=', rec.id])
+            reservations.customer = rec.env['res.config.settings'].deleted_user_template
+
+        return super(ResUsers, self).unlink()
