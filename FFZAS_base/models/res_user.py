@@ -14,30 +14,6 @@ class ResUsers(models.Model):
                             , default='c'
                             , string="User Type")
 
-    @api.model
-    def create(self, values):
-        # Create the record
-        record = super(ResUsers, self).create(values)
-
-        #Display Success message along with the username
-        if record.name:
-            message = f"User '{record.name}' has been successfully created."
-            self.env.user.notify_info(message)
-
-        return record
-
-    def write(self, values):
-        # Update the record
-        result = super(ResUsers, self).write(values)
-
-        #Display Success message along with the username
-        for record in self:
-            if record.name:
-                message = f"User '{record.name}' has been successfully updated."
-                self.env.user.notify_info(message)
-
-        return result
-
     def unlink(self):
         for rec in self:
             reservations = rec.env['reservation'].search(['customer', '=', rec.id])
