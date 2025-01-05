@@ -27,8 +27,8 @@ class Reservation(models.Model):
 
         reservations = self.search([
             ('field', '=', field_id),
-            ('time_from', '<', 'time_to'), # check if the time overlaps: the start time comes before the new end time
-            ('time_to', '>', 'time_from'), # check if the time overlaps: the end time comes after the new start time
+            ('time_from', '<', time_to), # check if the time overlaps: the start time comes before the new end time
+            ('time_to', '>', time_from), # check if the time overlaps: the end time comes after the new start time
             ('state', '!=', 'completed') # to avoid checking any completed reservations
         ])
         if reservations:
