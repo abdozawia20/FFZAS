@@ -1,29 +1,44 @@
 <odoo>
     <data>
 
-    <record id="view_res_users_tree_customer" model="ir.ui.view">
-        <field name="name">res.users.tree.customer</field>
-        <field name="model">res.users</field>
-        <field name="arch" type="xml">
-            <tree string="Customers">
-                <field name="id" string="Customer ID"/>
-                <field name="name"/>
-                <field name="surname"/>
-                <field name="telephone"/>
-                <field name="type"/>
-            </tree>
-        </field>
-    </record>
+        <record id="inherit_view_users_simple_form" model="ir.ui.view">
+            <field name="name">inherit.view.users.simple.form</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_simple_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='phone_numbers']" position="replace">
+                    <group>
+                        <field name="surname"/>
+                        <field name="telephone"/>
+                        <field name="type" default="c" required="1"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
 
-    <record id="action_res_users_customer" model="ir.actions.act_window">
-        <field name="name">Customers</field>
-        <field name="res_model">res.users</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_res_users_tree_customer"/>
-        <field name="context">{'default_type': 'c'}</field>
-    </record>
+        <record id="view_res_users_tree_customer" model="ir.ui.view">
+            <field name="name">res.users.tree.customer</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <tree string="Customers">
+                    <field name="id" string="Customer ID"/>
+                    <field name="name"/>
+                    <field name="surname"/>
+                    <field name="telephone"/>
+                    <field name="type"/>
+                </tree>
+            </field>
+        </record>
 
-    <menuitem id="menu_res_users_customer" name="Customers" parent="menu_reservation_root" action="action_res_users_customer"/>
+        <record id="action_res_users_customer" model="ir.actions.act_window">
+            <field name="name">Customers</field>
+            <field name="res_model">res.users</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_res_users_tree_customer"/>
+            <field name="context">{'default_type': 'c'}</field>
+        </record>
 
-    </data>>
+        <menuitem id="menu_res_users_customer" name="Customers" parent="menu_reservation_root" action="action_res_users_customer"/>
+
+    </data>
 </odoo>
