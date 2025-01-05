@@ -72,7 +72,6 @@ class Reservation(models.Model):
     def _compute_capacity(self):
         self.capacity = self.field.capacity
 
-    @api.model
     def unlink(self):
 
         for rec in self:
