@@ -7,6 +7,8 @@ class ResConfigSettings(models.TransientModel):
     deleted_user_template = fields.Many2one(
         comodel_name='res.users',
         string="Deleted User Template",
+        required=True,
+        default=1
     )
 
     @api.model
