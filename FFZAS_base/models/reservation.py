@@ -5,7 +5,7 @@ from odoo.exceptions import UserError
 class Reservation(models.Model):
     _name = "reservation"
 
-    customer = fields.Many2one(comodel_name='res.users', string="Customer", required=True)
+    customer = fields.Many2one(comodel_name='res.users', string="Customer")
     time_from = fields.Datetime(string="Time From")
     time_to = fields.Datetime(string="Time To")
     field = fields.Many2one(comodel_name='field', string="Field")
@@ -42,7 +42,10 @@ class Reservation(models.Model):
         if self.is_field_available(values.get('time_from'), values.get('time_to'), field):
             raise UserError("The selected field is already booked during the specified time range.")
 
-        return super(Reservation, self).create(values)  # Proceed with creating the reservation
+        reservation = super(Reservation, self).create(values)  # Proceed with creating the reservation
+        reservation.customer = self.env.user.id
+
+        return reservation
 
     def write(self, values):
         # Checking if field is available before updating the reservation
