@@ -6,21 +6,21 @@
       <field name="model">reservation</field>
       <field name="arch" type="xml">
         <kanban>
-          <field name="state" invisible="1" />
+          <field name="state"/>
             <templates>
               <t t-name="kanban-box">
-                <div t-attf-class="o_kanban_card {{ record.state.raw_value }}">
+                <div t-attf-class="o_kanban_card">
                   <div class="oe_kanban_content">
-                    <strong t-esc="record.name" />
+                    <strong><field name="id"/></strong>
                     <div>
-                      <small t-esc="record.date" />
+                      <small><field name="time_from"/></small>
                     </div>
                     <div t-if="record.price">
-                      <span t-esc="'USD ' + record.price" />
+                      <span>'USD '<field name="price"/></span>
                     </div>
                   </div>
                   <div class="oe_kanban_footer">
-                    <span class="badge" t-esc="record.state" />
+                    <span class="badge"><field name="state"/></span>
                   </div>
                 </div>
               </t>
@@ -50,7 +50,8 @@
         <form string="Reservation">
           <sheet>
             <header>
-              <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,finished"/>
+              <button name="confirm" string="Confirm"  type="object" class="btn-primary"/>
+              <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,completed"/>
             </header>
             <group>
               <!-- Split into two groups -->

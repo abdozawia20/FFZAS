@@ -11,8 +11,7 @@ class Reservation(models.Model):
     field = fields.Many2one(comodel_name='field', string="Field")
     state = fields.Selection(
         selection=[('draft', 'Draft'), ('confirmed', 'Confirmed'), ('completed' ,'Completed')],
-        default="draft",
-        readonly=True
+        default="draft"
     )
     price = fields.Float(string="Price")
 
@@ -25,12 +24,15 @@ class Reservation(models.Model):
     def is_field_available(self, time_from, time_to, field):
         field_id = field.id
 
-        reservations = self.search([
-            ('field', '=', field_id),
-            ('time_from', '<', time_to), # check if the time overlaps: the start time comes before the new end time
-            ('time_to', '>', time_from), # check if the time overlaps: the end time comes after the new start time
-            ('state', '!=', 'completed') # to avoid checking any completed reservations
-        ])
+        domain = [('state', '!=', 'completed')]
+        if field_id:
+            domain.append(('field', '=', field_id))
+
+        domain.append(('time_from', '<=', time_to))
+        domain.append(('time_to', '>=', time_from))
+
+        reservations = self.env['reservation'].search(domain)
+
         if reservations:
             return True
         return False
@@ -49,12 +51,18 @@ class Reservation(models.Model):
 
     def write(self, values):
         # Checking if field is available before updating the reservation
-        field = self.env['field'].browse(values.get('field')) if values.get('field') else self.field
-        if self.is_field_available(values.get('time_from', self.time_from), values.get('time_to', self.time_to),field):  # checking the new time range
-            raise UserError(
-                f"Unable to update the reservation from {self.time_from} to {self.time_to} because it conflicts with another reservation.")
+        # field = self.env['field'].browse(values.get('field')) if values.get('field') else self.field
+        # if self.is_field_available(values.get('time_from', self.time_from), values.get('time_to', self.time_to),field):  # checking the new time range
+        #     raise UserError(
+        #         f"Unable to update the reservation from {self.time_from} to {self.time_to} because it conflicts with another reservation.")
 
         return super(Reservation, self).write(values)  # Proceed with updating the reservation
+
+    def confirm(self):
+        if self.state=='draft':
+            self.state = 'confirmed'
+        else:
+            self.state='completed'
 
     @api.depends("customer")
     def _compute_name(self):
