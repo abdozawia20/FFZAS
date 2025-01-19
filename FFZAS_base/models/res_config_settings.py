@@ -1,9 +1,10 @@
 from odoo import fields, models, api
 
-
+# inheriting settings class to add more functionalities
 class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
 
+    # adding new variable to handle the deleted user template
     deleted_user_template = fields.Many2one(
         comodel_name='res.users',
         string="Deleted User Template",
@@ -11,6 +12,7 @@ class ResConfigSettings(models.TransientModel):
         default=1
     )
 
+    # a function that runs everytime the module is upgraded to insure the database is in the state it should be in
     @api.model
     def upgrade_module(self):
         # Search for a user with the name 'Deleted User'

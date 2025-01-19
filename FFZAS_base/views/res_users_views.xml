@@ -1,11 +1,12 @@
 <odoo>
     <data>
-
+<!--    creating the form view page for the users -->
         <record id="inherit_view_users_simple_form" model="ir.ui.view">
             <field name="name">inherit.view.users.simple.form</field>
             <field name="model">res.users</field>
             <field name="inherit_id" ref="base.view_users_simple_form"/>
             <field name="arch" type="xml">
+<!--            Overriding existing tags and replacing them with the necessary variables-->
                 <xpath expr="//group[@name='phone_numbers']" position="replace">
                     <group>
                         <field name="surname"/>
@@ -16,11 +17,13 @@
             </field>
         </record>
 
+<!--    creating the tree view for the customer-->
         <record id="view_res_users_tree_customer" model="ir.ui.view">
             <field name="name">res.users.tree.customer</field>
             <field name="model">res.users</field>
             <field name="arch" type="xml">
                 <tree string="Customers">
+<!--                adding the variables that should be displayed in the page-->
                     <field name="id" string="Customer ID"/>
                     <field name="name"/>
                     <field name="surname"/>
@@ -30,6 +33,7 @@
             </field>
         </record>
 
+<!--    Adding the tree and form view to an action listener to generate URLs-->
         <record id="action_res_users_customer" model="ir.actions.act_window">
             <field name="name">Customers</field>
             <field name="res_model">res.users</field>
@@ -38,6 +42,7 @@
             <field name="context">{'default_type': 'c'}</field>
         </record>
 
+<!--    adding the action listener to a button at the top of the reservation management page-->
         <menuitem id="menu_res_users_customer" name="Customers" parent="menu_reservation_root" action="action_res_users_customer"/>
 
     </data>
