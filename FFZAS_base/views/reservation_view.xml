@@ -1,6 +1,6 @@
 <odoo>
   <data>
-    <!-- kanban View  -->
+    <!-- Adding the kanban View  -->
     <record id="view_reservation_kanban" model="ir.ui.view">
       <field name="name">reservation.kanban.view</field>
       <field name="model">reservation</field>
@@ -29,7 +29,7 @@
       </field>
     </record>
     
-    <!-- Tree View -->
+    <!-- Adding the Tree View -->
     <record id="view_reservation_tree" model="ir.ui.view">
       <field name="name">reservation.tree.view</field>
       <field name="model">reservation</field>
@@ -42,7 +42,7 @@
       </field>
     </record>
 
-    <!-- Form View  -->
+    <!-- Adding the Form View  -->
     <record id="view_reservation_form" model="ir.ui.view">
       <field name="name">reservation.form.view</field>
       <field name="model">reservation</field>
@@ -54,7 +54,6 @@
               <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,completed"/>
             </header>
             <group>
-              <!-- Split into two groups -->
               <group>
                 <field name="customer" readonly="1"/>
                 <field name="name" readonly="1"/>
@@ -84,7 +83,7 @@
       <field name="context">{'group_by': 'state'}</field>
       <field name="groups_id" eval="[(4, ref('base.group_user')), (4, ref('base.group_system'))]"/>
     </record>
-    <!-- Updated Action with Tree View -->
+    <!-- Action for Tree and Form View -->
     <record id="action_reservation_tree_form" model="ir.actions.act_window">
       <field name="name">Reservations</field>
       <field name="res_model">reservation</field>
@@ -94,17 +93,17 @@
       <field name="groups_id" eval="[(4, ref('base.group_user')), (4, ref('base.group_system'))]"/>
     </record>
 
-    <!-- Menu Item -->
+    <!-- Linking Action listeners to Tabs  -->
     <menuitem id="menu_reservation_root" name="Reservations Management"/>
     <menuitem id="menu_reservation_dashboard" name="Dashboard" parent="menu_reservation_root" action="action_reservation_kanban_form"/>
     <menuitem id="menu_reservation_tree_view" name="Reservation" parent="menu_reservation_root" action="action_reservation_tree_form"/>
 
-    <!-- Access Control for Employee and SuperUser -->
+    <!-- Access Control for all users -->
     <record id="reservation_form_access_super_user_employee" model="ir.model.access">
       <field name="name">reservation form access for Employee and SuperUser</field>
       <field name="model_id" ref="model_reservation"/>
-      <field name="group_id" ref="base.group_user"/>  <!-- Employee -->
-      <field name="group_id" ref="base.group_system"/>  <!-- SuperUser -->
+      <field name="group_id" ref="base.group_user"/>
+      <field name="group_id" ref="base.group_system"/>
       <field name="perm_read" eval="True"/>
       <field name="perm_write" eval="True"/>
       <field name="perm_create" eval="True"/>
